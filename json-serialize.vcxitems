@@ -27,4 +27,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)json\VarJSON.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)json\Vector.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory).gitignore" />
+    <None Include="$(MSBuildThisFileDirectory)READMY.md" />
+  </ItemGroup>
 </Project>
