@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{14cff825-2635-4498-bf79-92dc80e49803}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)json\Item.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)json\Types.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)json\Var.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)json\VarJSON.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)json\Vector.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)json\Item.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)json\Types.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)json\Var.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)json\VarJSON.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)json\Vector.h" />
+  </ItemGroup>
+</Project>
