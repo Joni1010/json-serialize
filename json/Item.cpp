@@ -1,6 +1,5 @@
 #include "Item.h"
-#include <iostream>
-#include "Vector.h"
+#include <json\Vector.h>
 
 using namespace jsonTools;
 
@@ -8,7 +7,34 @@ Item::Item() {
 }
 Item::~Item() {
 	if (this->item != NULL) {
-		delete this->item;
+		Var* var = this->GetVar();
+		if (var->GetType() == Types::INT) {
+			delete (VarJSON<int>*)item;
+		}
+		else if (var->GetType() == Types::INT8) {
+			delete (VarJSON<__int8>*)item;
+		}
+		else if (var->GetType() == Types::INT16) {
+			delete (VarJSON<__int16>*)item;
+		}
+		else if (var->GetType() == Types::INT64) {
+			delete (VarJSON<__int64>*)item;
+		}
+		else if (var->GetType() == Types::FLOAT) {
+			delete (VarJSON<float>*)item;
+		}
+		else if (var->GetType() == Types::LONG) {
+			delete (VarJSON<long>*)item;
+		}
+		else if (var->GetType() == Types::BOOL) {
+			delete (VarJSON<bool>*)item;
+		}
+		else if (var->GetType() == Types::DOUBLE) {
+			delete (VarJSON<double>*)item;
+		}
+		else if (var->GetType() == Types::STRING) {
+			delete (VarJSON<std::string>*)item;
+		}
 	}
 }
 Item::Item(std::string name, int value) {
@@ -33,9 +59,6 @@ Item::Item(std::string name, double value) {
 	this->Set(name, value);
 }
 Item::Item(std::string name, std::string value) {
-	this->Set(name, value);
-}
-Item::Item(std::string name, void* value) {
 	this->Set(name, value);
 }
 
@@ -63,9 +86,6 @@ Item::Item(double value) {
 Item::Item(std::string value) {
 	this->Set("", value);
 }
-Item::Item(void* value) {
-	this->Set("", value);
-}
 
 void Item::Set(std::string name, int value) {
 	this->item = new VarJSON<int>(name, value);
@@ -91,22 +111,24 @@ void Item::Set(std::string name, double value) {
 void Item::Set(std::string name, std::string value) {
 	this->item = new VarJSON<std::string>(name, value);
 }
-
-void Item::Set(std::string name, void* value) {
-	this->item = new VarJSON<void*>(name, value);
+Item* Item::SetVector() {
+	this->vector = true;
+	return this;
 }
 
 
 std::string Item::serializationName() {
-	Var* var = (Var*)this->item;
-	if (var->Name().length() > 0) {
-		return "\"" + var->Name() + "\": ";
+	if (this->item != NULL) {
+		Var* var = (Var*)this->item;
+		if (var->Name().length() > 0) {
+			return "\"" + var->Name() + "\": ";
+		}
 	}
 	return "";
 }
 
 Var* Item::GetVar() {
-	return (Var*)this->item;
+	return this->item != NULL ? (Var*)this->item : NULL;
 }
 
 std::string Item::serializationValue() {
@@ -136,7 +158,13 @@ std::string Item::serializationValue() {
 		return std::to_string(((VarJSON<double>*) this->item)->Value());
 	}
 	else if (var->GetType() == Types::STRING) {
-		return "\"" + ((VarJSON<std::string>*) this->item)->Value() + "\"";
+		std::string value = ((VarJSON<std::string>*) this->item)->Value();
+		if (this->vector) {
+			return value;
+		}
+		else {
+			return "\"" + replaceSimbols(value) + "\"";
+		}
 	}
 	else if (var->GetType() == Types::VECTOR) {
 		return ((VarJSON<Vector*>*) this->item)->Value()->Serialize();
@@ -145,4 +173,15 @@ std::string Item::serializationValue() {
 }
 std::string Item::Serialization(bool isArray) {
 	return (isArray ? "" : this->serializationName()) + this->serializationValue();
+}
+
+std::string Item::replaceSimbols(std::string content) {
+	std::string result = "";
+	for (int i = 0; i < content.size(); i++) {
+		if (content[i] == '"') {
+			result += "\\";
+		}
+		result += content[i];
+	}
+	return result;
 }

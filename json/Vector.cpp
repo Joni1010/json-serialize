@@ -4,7 +4,7 @@ using namespace jsonTools;
 
 
 Vector::Vector() {
-	this->collection = new std::list<Item*>();
+	this->collection = new UList<Item*>();
 }
 
 
@@ -14,13 +14,28 @@ Vector::~Vector() {
 }
 
 void Vector::Clear() {
-	this->collection->clear();
+	auto item = collection->GetFirst();
+	while (item != NULL) {
+		auto elem = item->Item();
+		if (elem != NULL) {
+			delete elem;
+		}
+		item = item->Next();
+	}
+	this->collection->Clear();
 }
 
 
-void Vector::Add(Item* jsonItem) {
-	if (!this->checkDouble(jsonItem) || jsonItem->GetVar()->IsArray()) {
-		this->collection->push_front(jsonItem);
+int Vector::Count() {
+	if (this->collection != NULL) {
+		return this->collection->Count();
+	}
+	return 0;
+}
+
+void Vector::Add(Item* jsonItem, bool addAny) {
+	if (addAny || !this->checkDouble(jsonItem) || jsonItem->GetVar()->IsArray()) {
+		this->collection->Add(jsonItem);
 	}
 }
 
@@ -33,42 +48,52 @@ bool Vector::checkDouble(Item* jsonItem) {
 }
 
 Item* Vector::Get(Item* jsonItem) {
-	for (std::list<Item*>::iterator i = this->collection->begin(); i != this->collection->end(); ++i) {
-		auto val = i._Ptr->_Myval;
-		if (val != NULL && val->GetVar()->Name() == jsonItem->GetVar()->Name()) {
-			return val;
+	auto item = collection->GetFirst();
+	while (item != NULL) {
+		if (item->Item() != NULL && jsonItem->GetVar()->Name().length() > 0 && 
+			item->Item()->GetVar()->Name() == jsonItem->GetVar()->Name()) {
+			return item->Item();
 		}
+		item = item->Next();
 	}
+	return NULL;
 }
 Item* Vector::Get(std::string nameVar) {
-	for (std::list<Item*>::iterator i = this->collection->begin(); i != this->collection->end(); ++i) {
-		auto val = i._Ptr->_Myval;
-		if (val->GetVar()->Name() == nameVar) {
-			return val;
+	auto item = collection->GetFirst();
+	while (item != NULL) {
+		if (item->Item()->GetVar()->Name() == nameVar) {
+			return item->Item();
 		}
+		item = item->Next();
 	}
+	return NULL;
 }
 
 std::string Vector::Serialize() {
 	bool isArray = false;
 	std::string result = "";
-	for (std::list<Item*>::iterator i = this->collection->begin(); i != this->collection->end(); ++i) {
-		auto val = i._Ptr->_Myval;
-		if (val->GetVar()->IsArray()) {
+	if (collection->Count() == 0) {
+		return result;
+	}
+	auto item = collection->GetFirst();
+	while (item != NULL) {
+		if (item->Item()->GetVar()->IsArray()) {
 			isArray = true;
 		}
+		item = item->Next();
 	}
-	for (std::list<Item*>::iterator i = this->collection->begin(); i != this->collection->end(); ++i) {
-		auto val = i._Ptr->_Myval;
-		if (result != "") {
-			result = val->Serialization(isArray) + ", " + result;
+	item = collection->GetFirst();
+	while (item != NULL) {
+		if (!result.empty()) {
+			result = item->Item()->Serialization(isArray) + ", " + result;
 		}
 		else {
-			result = val->Serialization(isArray);
+			result = item->Item()->Serialization(isArray);
 		}
+		item = item->Next();
 	}
 	if (isArray) {
 		return "[ " + result + " ]";
-	} 
+	}
 	return "{ " + result + " }";
 }

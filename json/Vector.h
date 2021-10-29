@@ -1,19 +1,23 @@
 #pragma once
 #include <list>
+#include <string>
 #include "Item.h"
+#include "UList.h"
+
 namespace jsonTools {
 	class Vector
 	{
 	private:
-		std::list<Item*>* collection;
+		UList<Item*>* collection;
 		bool checkDouble(Item* jsonItem);
 	public:
 		Vector();
 		~Vector();
-		void Add(Item* jsonItem);
+		void Add(Item* jsonItem, bool addAny = true);
 		Item* Get(Item* jsonItem);
 		Item* Get(std::string nameVar);
 		std::string Serialize();
+		int Count();
 		void Clear();
 	};
 }
