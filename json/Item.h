@@ -24,6 +24,7 @@ namespace jsonTools {
 		Item(std::string name, float value);
 		Item(std::string name, double value);
 		Item(std::string name, std::string value);
+		Item(std::string name, std::string value, bool vector);
 
 		Item(int value);
 		Item(__int8 value);
@@ -43,7 +44,7 @@ namespace jsonTools {
 		void Set(std::string name, float value);
 		void Set(std::string name, double value);
 		void Set(std::string name, std::string value);
-		Item* SetVector();
+		void Set(std::string name, std::string value, bool vector);
 
 		Var* GetVar();
 		std::string Serialization(bool isArray = false);

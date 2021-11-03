@@ -14,6 +14,7 @@ namespace jsonTools {
 		Vector();
 		~Vector();
 		void Add(Item* jsonItem, bool addAny = true);
+		void Add(std::string name, Vector* vector);
 		Item* Get(Item* jsonItem);
 		Item* Get(std::string nameVar);
 		std::string Serialize();

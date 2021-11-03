@@ -60,9 +60,6 @@ namespace jsonTools {
 		else if (typeid(T) == typeid(long)) {
 			this->type = Types::LONG;
 		}
-		else {
-			this->type = Types::VECTOR;
-		}
 	}
 
 	template<typename T>
