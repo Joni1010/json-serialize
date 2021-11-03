@@ -14,8 +14,6 @@ namespace jsonTools {
 		const static int STRING = 6;
 		const static int BOOL = 7;
 		const static int LONG = 8;
-
-		const static int VECTOR = 50;
 	};
 }
 

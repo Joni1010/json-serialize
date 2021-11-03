@@ -33,6 +33,12 @@ int Vector::Count() {
 	return 0;
 }
 
+void Vector::Add(std::string name, Vector* vector) {
+	if (vector != NULL) {
+		this->collection->Add((new Item(name, vector->Serialize(), true)));
+	}
+}
+
 void Vector::Add(Item* jsonItem, bool addAny) {
 	if (addAny || !this->checkDouble(jsonItem) || jsonItem->GetVar()->IsArray()) {
 		this->collection->Add(jsonItem);

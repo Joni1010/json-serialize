@@ -61,6 +61,10 @@ Item::Item(std::string name, double value) {
 Item::Item(std::string name, std::string value) {
 	this->Set(name, value);
 }
+Item::Item(std::string name, std::string value, bool vector) {
+	this->Set(name, value, vector);
+}
+
 
 Item::Item(int value) {
 	this->Set("", value);
@@ -111,11 +115,10 @@ void Item::Set(std::string name, double value) {
 void Item::Set(std::string name, std::string value) {
 	this->item = new VarJSON<std::string>(name, value);
 }
-Item* Item::SetVector() {
-	this->vector = true;
-	return this;
+void Item::Set(std::string name, std::string value, bool vector) {
+	Set(name, value);
+	this->vector = vector;
 }
-
 
 std::string Item::serializationName() {
 	if (this->item != NULL) {
@@ -165,9 +168,6 @@ std::string Item::serializationValue() {
 		else {
 			return "\"" + replaceSimbols(value) + "\"";
 		}
-	}
-	else if (var->GetType() == Types::VECTOR) {
-		return ((VarJSON<Vector*>*) this->item)->Value()->Serialize();
 	}
 	return "";
 }
