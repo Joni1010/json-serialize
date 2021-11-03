@@ -20,13 +20,13 @@ int main()
 	Json1.Add(new jsonTools::Item("v2", "222"));
 
 	jsonTools::Vector Json2;
-	Json2.Add(new jsonTools::Item("g1", &Json0));
-	Json2.Add(new jsonTools::Item("g2", &Json1));
+	Json2.Add("g1", &Json0);
+	Json2.Add("g2", &Json1);
 	Json2.Add(new jsonTools::Item("g3", 222));
 
 	jsonTools::Vector Json3;
-	Json3.Add(new jsonTools::Item(&Json0));
-	Json3.Add(new jsonTools::Item(&Json1));
+	Json3.Add("", &Json0);
+	Json3.Add("", &Json1);
 	Json3.Add(new jsonTools::Item(222));
 
 	std::cout << Json0.Serialize() << " \n\n";
