@@ -101,5 +101,6 @@ std::string Vector::Serialize() {
 	if (isArray) {
 		return "[ " + result + " ]";
 	}
+	delete item;
 	return "{ " + result + " }";
 }
